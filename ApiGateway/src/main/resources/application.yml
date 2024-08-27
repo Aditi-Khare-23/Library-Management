@@ -1,0 +1,33 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: API-GATEWAY
+
+cloud:
+  gateway:
+    routes:
+      - id: BORROWS
+        uri: lb://BORROWS
+        predicates:
+          - Path: /library-borrow-service/**,borrows/**
+
+      - id: MEMBERS
+        uri: lb://MEMBERS
+        predicates:
+          - Path: /library-member-service/**,members/**
+
+      - id: LIBRARY
+        uri: lb://LIBRARY
+        predicates:
+          - Path: /library-book-service/**/books/**
+
+eureka:
+  instance:
+    prefer-ip-address = true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultzone: http://localhost:8761/eureka
